@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { 
   LayoutDashboard, 
   Package, 
@@ -22,7 +22,8 @@ import {
   ExternalLink,
   Menu,
   X,
-  ShieldCheck
+  ShieldCheck,
+  LogOut
 } from "lucide-react";
 import { Logo } from "../common/Logo";
 
@@ -129,7 +130,7 @@ export const AdminSidebar: React.FC = () => {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gold/20 bg-white">
+          <div className="p-4 border-t border-gold/20 bg-white space-y-2">
             <Link
               href="/"
               target="_blank"
@@ -138,6 +139,20 @@ export const AdminSidebar: React.FC = () => {
               <span>VIEW STOREFRONT</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
+
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await fetch("/api/auth/admin-logout", { method: "POST" });
+                } catch {}
+                window.location.href = "/admin/login";
+              }}
+              className="w-full py-2 border border-red-800/40 bg-red-950/10 text-red-700 text-xs uppercase tracking-luxury hover:bg-red-900 hover:text-white transition-colors font-medium flex items-center justify-center gap-1.5"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>LOGOUT ATELIER</span>
+            </button>
           </div>
         </div>
       </aside>

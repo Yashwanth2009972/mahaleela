@@ -6,23 +6,28 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding MAHALEELA database...");
 
+  const adminEmail = "leelambikamahadeva@gmail.com";
   const existingAdmin = await prisma.user.findUnique({
-    where: { email: "admin@mahaleela.com" },
+    where: { email: adminEmail },
   });
 
   if (!existingAdmin) {
-    const hash = await bcrypt.hash("Mahaleela@2026", 12);
+    const hash = await bcrypt.hash("182009", 12);
     await prisma.user.create({
       data: {
-        email: "admin@mahaleela.com",
+        email: adminEmail,
         passwordHash: hash,
-        name: "MAHALEELA Admin",
+        name: "MAHALEELA Owner",
         role: "ADMIN",
       },
     });
-    console.log("Admin user created: admin@mahaleela.com");
+    console.log("Admin user created: " + adminEmail);
   } else {
-    console.log("Admin user already exists.");
+    await prisma.user.update({
+      where: { email: adminEmail },
+      data: { role: "ADMIN" },
+    });
+    console.log("Admin user confirmed: " + adminEmail);
   }
 
   const categories = [
