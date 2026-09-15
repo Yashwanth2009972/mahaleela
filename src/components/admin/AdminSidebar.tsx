@@ -23,7 +23,8 @@ import {
   Menu,
   X,
   ShieldCheck,
-  LogOut
+  LogOut,
+  KeyRound
 } from "lucide-react";
 import { Logo } from "../common/Logo";
 
@@ -36,13 +37,14 @@ const ADMIN_NAV = [
   { name: "CUSTOMERS", href: "/admin/customers", icon: Users },
   { name: "BANNERS", href: "/admin/banners", icon: ImageIcon },
   { name: "HOMEPAGE", href: "/admin/homepage", icon: Home },
-  { name: "VISUAL ASSETS", href: "/admin/visual-assets", icon: Sparkles }, // Highlighted first-class
+  { name: "VISUAL ASSETS", href: "/admin/visual-assets", icon: Sparkles },
   { name: "COUPONS", href: "/admin/coupons", icon: TicketPercent },
   { name: "OFFERS", href: "/admin/offers", icon: BadgePercent },
   { name: "MEDIA", href: "/admin/media", icon: HardDrive },
   { name: "NAVIGATION", href: "/admin/navigation", icon: Compass },
   { name: "EXCLUSIVE", href: "/admin/exclusive", icon: ShieldCheck },
   { name: "SETTINGS", href: "/admin/settings", icon: Settings },
+  { name: "SECURITY PIN", href: "/admin/security", icon: KeyRound },
 ];
 
 export const AdminSidebar: React.FC = () => {

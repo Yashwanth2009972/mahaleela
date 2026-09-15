@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
-import { requireAdmin } from "@/lib/auth";
+﻿import { requireAdmin } from "@/lib/auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import Link from "next/link";
-import { ShieldCheck, User } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
+import AdminPinLoginPage from "./login/page";
 
 export const dynamic = "force-dynamic";
 
@@ -13,8 +13,9 @@ export default async function AdminLayout({
 }) {
   const admin = await requireAdmin();
 
+  // If not authenticated with Master PIN, lock screen to dedicated Master PIN Gate
   if (!admin) {
-    redirect("/account/login?redirect=/admin");
+    return <AdminPinLoginPage />;
   }
 
   return (
@@ -44,6 +45,7 @@ export default async function AdminLayout({
 
             <Link
               href="/"
+              target="_blank"
               className="px-3 py-1 border border-gold bg-white text-gold text-xs uppercase tracking-luxury hover:bg-gold hover:text-white transition-colors"
             >
               STOREFRONT

@@ -1,20 +1,31 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-const MASTER_ADMIN_PIN = "182009";
+const DEFAULT_MASTER_PIN = "182009";
 const ADMIN_EMAIL = "leelambikamahadeva@gmail.com";
 
 export async function POST(req: Request) {
   try {
     const { pin } = await req.json();
 
-    if (!pin || pin.toString().trim() !== MASTER_ADMIN_PIN) {
+    // Fetch dynamic master PIN if changed by owner in admin panel
+    let currentMasterPin = DEFAULT_MASTER_PIN;
+    try {
+      const pinSetting = await prisma.siteSettings.findUnique({
+        where: { key: "master_admin_pin" },
+      });
+      if (pinSetting?.value) {
+        currentMasterPin = pinSetting.value.trim();
+      }
+    } catch {}
+
+    if (!pin || pin.toString().trim() !== currentMasterPin) {
       return NextResponse.json(
-        { error: "Invalid master security PIN code. Access denied." },
+        { error: "Incorrect security PIN. Access denied." },
         { status: 401 }
       );
     }
