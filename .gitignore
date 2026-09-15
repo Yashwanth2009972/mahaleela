@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Production
+dist/
+
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.*.local
+
+# SQLite local database
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.db
+prisma/*.db-shm
+prisma/*.db-wal
+
+# Local uploads (use Cloudinary in production)
+public/uploads/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+*.pem
+
+# Vercel/Render
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
