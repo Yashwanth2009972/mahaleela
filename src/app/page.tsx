@@ -8,40 +8,49 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function HomePage() {
-  // 1. Fetch active hero banner (highest priority)
-  const activeBanner = await prisma.banner.findFirst({
-    where: { isActive: true },
-    orderBy: { priority: "desc" },
-  });
+  let activeBanner = null;
+  let categories: any[] = [];
+  let products: any[] = [];
+  let coupons: any[] = [];
+  let galleryItems: any[] = [];
 
-  // 2. Fetch categories (all 12 predefined)
-  const categories = await prisma.category.findMany({
-    where: { isPublished: true },
-    orderBy: { orderIndex: "asc" },
-  });
+  try {
+    const [bannerRes, catRes, prodRes, coupRes, gallRes] = await Promise.all([
+      prisma.banner.findFirst({
+        where: { isActive: true },
+        orderBy: { priority: "desc" },
+      }).catch(() => null),
+      prisma.category.findMany({
+        where: { isPublished: true },
+        orderBy: { orderIndex: "asc" },
+      }).catch(() => []),
+      prisma.product.findMany({
+        where: { isPublished: true, isArchived: false },
+        orderBy: { createdAt: "desc" },
+        include: {
+          category: { select: { id: true, name: true, slug: true } },
+          images: { orderBy: { orderIndex: "asc" } },
+          variants: true,
+        },
+      }).catch(() => []),
+      prisma.coupon.findMany({
+        where: { isActive: true },
+        orderBy: { createdAt: "desc" },
+      }).catch(() => []),
+      prisma.galleryItem.findMany({
+        where: { isActive: true },
+        orderBy: { orderIndex: "asc" },
+      }).catch(() => []),
+    ]);
 
-  // 3. Fetch catalogue products
-  const products = await prisma.product.findMany({
-    where: { isPublished: true, isArchived: false },
-    orderBy: { createdAt: "desc" },
-    include: {
-      category: { select: { id: true, name: true, slug: true } },
-      images: { orderBy: { orderIndex: "asc" } },
-      variants: true,
-    },
-  });
-
-  // 4. Fetch active coupons for catalogue bar
-  const coupons = await prisma.coupon.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
-
-  // 5. Fetch 9:16 gallery items
-  const galleryItems = await prisma.galleryItem.findMany({
-    where: { isActive: true },
-    orderBy: { orderIndex: "asc" },
-  });
+    activeBanner = bannerRes;
+    categories = catRes || [];
+    products = prodRes || [];
+    coupons = coupRes || [];
+    galleryItems = gallRes || [];
+  } catch (err) {
+    console.error("Database query fallback on HomePage:", err);
+  }
 
   return (
     <main className="w-full bg-black min-h-screen">
