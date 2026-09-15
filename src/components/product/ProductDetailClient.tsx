@@ -356,7 +356,7 @@ export const ProductDetailClient: React.FC<ProductDetailClientProps> = ({ produc
           <div className="mt-8 p-4 border border-gold/30 bg-cream/40 space-y-2 text-[10px] tracking-luxury uppercase text-gold">
             <div className="flex items-center gap-2">
               <Truck className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>COMPLIMENTARY SHIPPING ON ORDERS ABOVE ₹2,000</span>
+              <span>DELIVERY CHARGES ACCORDING TO LOCATION</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" />
@@ -475,7 +475,7 @@ export const ProductDetailClient: React.FC<ProductDetailClientProps> = ({ produc
               {openAccordions.shippingReturns && (
                 <div className="pt-3 text-xs uppercase tracking-luxury text-gold/80 font-light leading-relaxed">
                   {product.shippingReturns ||
-                    "Dispatched within 24 hours from Bengaluru atelier. Complimentary courier tracking provided via SMS and email. 7-day hassle-free returns on unworn items."}
+                    "Dispatched within 24 hours from Bengaluru atelier. Direct courier tracking provided via SMS and email. 7-day hassle-free returns on unworn items."}
                 </div>
               )}
             </div>

@@ -184,7 +184,7 @@ export const SettingsClient: React.FC<SettingsClientProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs uppercase tracking-luxury text-gold mb-1 font-medium">
-              COMPLIMENTARY SHIPPING THRESHOLD (₹) *
+              BASE SHIPPING CHARGE (₹) *
             </label>
             <input
               type="number"
@@ -193,7 +193,7 @@ export const SettingsClient: React.FC<SettingsClientProps> = ({
               className="w-full px-4 py-3 bg-cream/30 border border-gold text-xs font-serif text-gold focus:outline-none"
             />
             <span className="text-[9px] text-gold/60 mt-1 block">
-              DEFAULT: ₹2,000 (FREE SHIPPING ABOVE THIS VALUE)
+              DELIVERY CHARGES APPLIED ACCORDING TO LOCATION (NO FREE SHIPPING)
             </span>
           </div>
 

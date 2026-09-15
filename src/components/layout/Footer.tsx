@@ -144,7 +144,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <span className="text-[10px] text-gold/70 block pt-2">
-                  COMPLIMENTARY SHIPPING &gt; ₹2,000 • COD AVAILABLE
+                  DELIVERY CHARGES AS PER LOCATION • COD AVAILABLE
                 </span>
               </li>
             </ul>

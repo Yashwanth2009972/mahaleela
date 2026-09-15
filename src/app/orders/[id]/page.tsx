@@ -191,7 +191,7 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
               <div className="flex justify-between">
                 <span>SHIPPING</span>
                 <span className="font-serif">
-                  {order.shippingFee === 0 ? "COMPLIMENTARY" : `₹${order.shippingFee}`}
+                  {order.shippingFee === 0 ? "AS PER LOCATION" : `₹${order.shippingFee}`}
                 </span>
               </div>
               {order.codFee > 0 && (

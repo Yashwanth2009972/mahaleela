@@ -55,6 +55,24 @@ async function main() {
     i++;
   }
   console.log(categories.length + " categories seeded.");
+
+  // Seed default site settings (no free shipping, location-based delivery)
+  await prisma.siteSettings.upsert({
+    where: { key: "announcement_text" },
+    update: { value: "PAN-INDIA DISPATCH • DELIVERY CHARGES ACCORDING TO LOCATION" },
+    create: { key: "announcement_text", value: "PAN-INDIA DISPATCH • DELIVERY CHARGES ACCORDING TO LOCATION" },
+  });
+  await prisma.siteSettings.upsert({
+    where: { key: "announcement_link" },
+    update: { value: "/#catalogue" },
+    create: { key: "announcement_link", value: "/#catalogue" },
+  });
+  await prisma.siteSettings.upsert({
+    where: { key: "announcement_enabled" },
+    update: { value: "true" },
+    create: { key: "announcement_enabled", value: "true" },
+  });
+
   console.log("Database seeding complete!");
 }
 

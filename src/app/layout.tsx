@@ -40,8 +40,8 @@ export default async function RootLayout({
   const currentUser = await getCurrentUser();
 
   // Load site settings from database
-  let announcementText = "COMPLIMENTARY DELIVERY ON ALL ORDERS ABOVE ₹2,000 ACROSS INDIA";
-  let announcementLink = "/collections";
+  let announcementText = "PAN-INDIA DISPATCH • DELIVERY CHARGES ACCORDING TO LOCATION";
+  let announcementLink = "/#catalogue";
   let isAnnouncementEnabled = true;
 
   try {
@@ -54,8 +54,12 @@ export default async function RootLayout({
     });
 
     for (const s of settings) {
-      if (s.key === "announcement_text") announcementText = s.value;
-      if (s.key === "announcement_link") announcementLink = s.value;
+      if (s.key === "announcement_text" && !s.value.includes("COMPLIMENTARY") && !s.value.includes("FREE")) {
+        announcementText = s.value;
+      }
+      if (s.key === "announcement_link" && s.value !== "/collections") {
+        announcementLink = s.value;
+      }
       if (s.key === "announcement_enabled") isAnnouncementEnabled = s.value === "true";
     }
   } catch {
