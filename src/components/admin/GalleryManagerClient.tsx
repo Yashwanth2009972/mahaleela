@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, Sparkles, Smartphone, Eye } from "lucide-react";
+import { Plus, Trash2, Smartphone } from "lucide-react";
 import { ImageDeviceUpload } from "./ImageDeviceUpload";
 
 export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) {
@@ -14,8 +14,6 @@ export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) 
 
   const [formData, setFormData] = useState({
     images: [] as string[],
-    title: "",
-    subtitle: "EDITORIAL PERSPECTIVE",
     orderIndex: "0",
   });
 
@@ -35,8 +33,8 @@ export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url: formData.images[0],
-          title: formData.title,
-          subtitle: formData.subtitle,
+          title: "",
+          subtitle: "",
           orderIndex: Number(formData.orderIndex) || 0,
         }),
       });
@@ -48,8 +46,6 @@ export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) 
       setShowForm(false);
       setFormData({
         images: [],
-        title: "",
-        subtitle: "EDITORIAL PERSPECTIVE",
         orderIndex: "0",
       });
       router.refresh();
@@ -73,16 +69,17 @@ export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) 
 
   return (
     <div className="space-y-8">
-      <div className="border border-gold/30 bg-cream p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Top Banner */}
+      <div className="border border-gold/30 bg-black p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-[10px] uppercase tracking-ultra text-gold/70 font-serif block mb-1">
-            VISUAL ARCHIVE
+            HOMEPAGE 9:16 PHOTO GALLERY
           </span>
           <h1 className="font-serif text-2xl sm:text-3xl text-gold uppercase tracking-luxury font-normal">
-            9:16 PHOTO GALLERY ({items.length})
+            PHOTO GALLERY ({items.length})
           </h1>
           <p className="text-xs uppercase tracking-luxury text-gold/80 mt-1">
-            VERTICAL 9:16 REEL & LOOKBOOK ASSETS DISPLAYED ON THE HOMEPAGE BELOW PRODUCTS
+            PURE 9:16 VERTICAL PHOTOS DISPLAYED ON THE HOMEPAGE BELOW PRODUCTS (NO TEXT/TITLES)
           </p>
         </div>
 
@@ -117,38 +114,14 @@ export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) 
             aspectHint="9:16 RATIO • UP TO 24K QUALITY • ALL FORMATS"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-[10px] uppercase tracking-luxury text-gold mb-1">CAPTION / TITLE</label>
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="E.G. SILHOUETTE VIII"
-                className="w-full bg-cream border border-gold/40 px-3 py-2 text-xs uppercase text-gold focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] uppercase tracking-luxury text-gold mb-1">SUBTITLE</label>
-              <input
-                type="text"
-                value={formData.subtitle}
-                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                placeholder="EDITORIAL PERSPECTIVE"
-                className="w-full bg-cream border border-gold/40 px-3 py-2 text-xs uppercase text-gold focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] uppercase tracking-luxury text-gold mb-1">ORDER SEQUENCE</label>
-              <input
-                type="number"
-                value={formData.orderIndex}
-                onChange={(e) => setFormData({ ...formData, orderIndex: e.target.value })}
-                className="w-full bg-cream border border-gold/40 px-3 py-2 text-xs text-gold focus:outline-none font-mono"
-              />
-            </div>
+          <div>
+            <label className="block text-[10px] uppercase tracking-luxury text-gold mb-1">ORDER SEQUENCE</label>
+            <input
+              type="number"
+              value={formData.orderIndex}
+              onChange={(e) => setFormData({ ...formData, orderIndex: e.target.value })}
+              className="w-full max-w-xs bg-cream border border-gold/40 px-3 py-2 text-xs text-gold focus:outline-none font-mono"
+            />
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-gold/20">
@@ -164,50 +137,52 @@ export function GalleryManagerClient({ initialItems }: { initialItems: any[] }) 
               disabled={isSubmitting}
               className="px-8 py-2 border border-gold bg-gold text-black text-xs uppercase font-bold hover:bg-white transition-colors"
             >
-              {isSubmitting ? "UPLOADING..." : "PUBLISH TO STOREFRONT GALLERY"}
+              {isSubmitting ? "SAVING..." : "SAVE TO PHOTO GALLERY"}
             </button>
           </div>
         </form>
       )}
 
-      {/* Gallery Grid */}
-      <div className="border border-gold/30 bg-black p-6 shadow-sm">
-        {items.length > 0 ? (
+      {/* Gallery Items Grid */}
+      <div className="border border-gold/30 bg-black p-6 space-y-6">
+        <h2 className="font-serif text-base text-gold uppercase tracking-luxury">
+          CURRENT ACTIVE 9:16 PHOTOS ({items.length})
+        </h2>
+
+        {items.length === 0 ? (
+          <div className="p-12 text-center border border-gold/20 bg-cream">
+            <p className="text-xs uppercase tracking-luxury text-gold/80">
+              NO 9:16 PHOTOS IN GALLERY YET.
+            </p>
+            <p className="text-[10px] uppercase tracking-luxury text-gold/60 mt-1">
+              CLICK &quot;ADD 9:16 PHOTO&quot; ABOVE TO UPLOAD HIGH-RESOLUTION VERTICAL SHOTS DIRECTLY FROM YOUR DEVICE.
+            </p>
+          </div>
+        ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {items.map((item) => (
               <div
                 key={item.id}
-                className="relative aspect-[9/16] border border-gold/40 bg-cream overflow-hidden group flex flex-col justify-end"
+                className="relative aspect-[9/16] border border-gold/40 bg-cream overflow-hidden group shadow-md"
               >
                 <img
                   src={item.url}
-                  alt={item.title || "Gallery Item"}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  alt="Gallery Photo"
+                  className="w-full h-full object-cover"
                 />
-                <div className="relative z-10 p-3 bg-gradient-to-t from-black via-black/60 to-transparent space-y-1">
-                  <p className="font-serif text-[11px] text-gold uppercase font-bold line-clamp-1">
-                    {item.title || "MAHALEELA"}
-                  </p>
-                  <p className="text-[8px] text-gold/70 uppercase tracking-wider line-clamp-1">
-                    {item.subtitle}
-                  </p>
+
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(item.id)}
+                    className="p-1.5 bg-red-600 text-white hover:bg-red-700 transition-colors shadow"
+                    title="Delete Photo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item.id)}
-                  className="absolute top-2 right-2 p-1.5 bg-red-950/80 border border-red-500/50 text-red-300 opacity-0 group-hover:opacity-100 transition-opacity z-20"
-                  title="Remove photo"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
               </div>
             ))}
-          </div>
-        ) : (
-          <div className="py-12 text-center text-gold/80 space-y-2">
-            <Smartphone className="w-8 h-8 mx-auto text-gold opacity-50" />
-            <p className="font-serif text-sm">NO 9:16 PHOTOS UPLOADED YET</p>
-            <p className="text-[10px] text-gold/60">Click "Add 9:16 Photo" to publish vertical lookbook photos to the storefront.</p>
           </div>
         )}
       </div>

@@ -21,26 +21,14 @@ export async function POST(req: Request) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const mimeType = file.type || "image/jpeg";
+    const base64Data = buffer.toString("base64");
+    const dataUri = `data:${mimeType};base64,${base64Data}`;
 
-    const uploadResult: any = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          {
-            folder: "mahaleela",
-            resource_type: "image",
-            use_filename: true,
-            unique_filename: true,
-            overwrite: false,
-          },
-          (error, result) => {
-            if (error || !result) {
-              reject(error || new Error("Cloudinary upload failed"));
-            } else {
-              resolve(result);
-            }
-          }
-        )
-        .end(buffer);
+    // Direct Cloudinary upload via data URI (bypasses stream signature issues)
+    const uploadResult = await cloudinary.uploader.upload(dataUri, {
+      folder: "mahaleela",
+      resource_type: "image",
     });
 
     const publicUrl = uploadResult.secure_url;
@@ -49,7 +37,7 @@ export async function POST(req: Request) {
       data: {
         filename: file.name || "mahaleela-asset",
         url: publicUrl,
-        mimeType: file.type || "image/jpeg",
+        mimeType: mimeType,
         size: uploadResult.bytes || file.size,
         width: uploadResult.width || 1920,
         height: uploadResult.height || 1080,
@@ -62,11 +50,11 @@ export async function POST(req: Request) {
       url: publicUrl,
       filename: file.name,
       size: file.size,
-      mimeType: file.type,
+      mimeType: mimeType,
       media,
     });
   } catch (err: any) {
-    console.error("Cloudinary upload failure:", err);
+    console.error("Upload failure:", err);
     return NextResponse.json({ error: err.message || "Failed to upload image file" }, { status: 500 });
   }
 }
